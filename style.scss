@@ -1,0 +1,118 @@
+$numberOfMarbles: 6;
+$marbleWidth: 3.75px;
+$marbleHeight: $marbleWidth;
+// $initColor: hsl(0, 100%, 50%);
+$marblesColor: hsl(212, 100%, 54%);
+$marbleRotatingTimingFunction: cubic-bezier(0.27, 0.04, 0, 0.8);
+$numberOfIterations: infinite;
+$marbleRotatingDuration: 3.8;
+$marblesRotationDuration: 3.8;
+$delayStep: .2s;
+$animationRotationTemplateName: marbleRotating;
+$animationAllRotationTemplateName: allMarblesRotating;
+$marblesContainerWidth: $marbleWidth*5;
+$marblesContainerHeigth: $marblesContainerWidth;
+$rotationFirst: 180;
+
+@mixin visible {
+    visibility: visible;
+}
+
+@mixin hidden {
+    visibility: hidden;
+}
+
+@mixin initialRotating {
+    transform: rotate($rotationFirst+deg);
+}
+
+@for $i from 1 to $numberOfMarbles {
+    .marble:nth-child(#{$i}) {
+        animation: #{$animationRotationTemplateName}#{$i} $marbleRotatingDuration+s $marbleRotatingTimingFunction $numberOfIterations $i*$delayStep;
+    }
+}
+
+.marble {
+    background-color: $marblesColor;
+    // hsl((255/$numberOfMarbles)*$i, 100%, 50%);
+    width: $marbleWidth;
+    height: $marbleHeight;
+    border-radius: 50%;
+    transform-origin: $marblesContainerWidth/2 $marblesContainerWidth/2;
+    position: absolute;
+    @include hidden;
+}
+
+.marbles {
+    width: $marblesContainerWidth;
+    height: $marblesContainerHeigth;
+    border-radius: 50%;
+    position: relative;
+    top: $marbleWidth;
+    left: $marbleWidth;
+    animation: $animationAllRotationTemplateName $marblesRotationDuration+s linear $numberOfIterations;
+}
+
+$landmark1: 0;
+$landmark2: 10;
+$landmark3: 31;
+$landmark4: 45;
+$landmark5: 66;
+$landmark6: 78;
+$landmark7: 80;
+
+@keyframes allMarblesRotating {
+    to {
+        transform: rotate(2turn);
+    }
+}
+
+@for $i from 1 to $numberOfMarbles {
+    $rotationStart: $rotationFirst+0-(($i+0-1)*25);
+
+    @keyframes marbleRotating#{$i} {
+        @if $i==1 {
+            #{$landmark1}% {
+                transform: rotate($rotationFirst+0+deg);
+                @include visible;
+            }
+        }
+
+        @else {
+            #{$landmark1}% {
+                transform: rotate($rotationStart+0+deg);
+                @include visible;
+            }
+        }
+
+        #{$landmark2}% {
+            transform: rotate($rotationStart+65+deg);
+            @include visible;
+        }
+
+        #{$landmark3}% {
+            transform: rotate($rotationStart+65+deg);
+            @include visible;
+        }
+
+        #{$landmark4}% {
+            transform: rotate($rotationStart+235+deg);
+            @include visible;
+        }
+
+        #{$landmark5}% {
+            transform: rotate($rotationStart+235+deg);
+            @include visible;
+        }
+
+        #{$landmark6}% {
+            transform: rotate($rotationStart+355+deg);
+            @include hidden;
+        }
+
+        #{$landmark7}% {
+            transform: rotate($rotationStart+355+deg);
+            @include hidden;
+        }
+    }
+}
